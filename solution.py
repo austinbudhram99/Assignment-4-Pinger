@@ -124,4 +124,5 @@ def ping(host, timeout=1):
     return vars
 
 if __name__ == '__main__':
-    ping("google.co.il")
+    #ping("google.co.il")
+    ping("127.0.0.1")
