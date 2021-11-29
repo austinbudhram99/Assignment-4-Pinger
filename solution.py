@@ -124,21 +124,22 @@ def ping(host, timeout=1):
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
         print(delay)
-        lst.append(round(delay[0]*1000,2))
+        # list.append(round(delay[0]*1000,2))
         time.sleep(1)  # one second
-
+        i +=1
     stdev = 0
-    packet_min = min(lst)
-    packet_max = max(lst)
-    packet_avg = sum(lst)/len(lst)
+    packet_min = min(list)
+    packet_max = max(list)
+    packet_avg = sum(list)/len(list)
 
     for i in lst:
         stdev += (i-packet_avg)**2
         # print (stdev)
-    stdev = math.sqrt((stdev / len(lst)))
+    # stdev_var = math.sqrt((stdev / len(list)))
+    stdev_var = list(map(int, list))
     vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     return vars
 
 if __name__ == '__main__':
-    #ping("google.co.il")
-    ping("127.0.0.1")
+    ping("google.co.il")
+   # ping("127.0.0.1")
