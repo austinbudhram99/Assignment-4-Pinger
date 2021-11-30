@@ -1,3 +1,4 @@
+from array import array
 from socket import *
 import os
 import sys
@@ -8,10 +9,6 @@ import binascii
 from types import CodeType
 from typing import Sequence
 # Should use stdev
-packet_min = 0
-packet_avg = 0
-packet_max = 0
-stdev_var = 0
 
 ICMP_ECHO_REQUEST = 8
 
@@ -117,26 +114,27 @@ def ping(host, timeout=1):
     dest = gethostbyname(host)
     print("Pinging " + dest + " using Python:")
     print("")
+    delay_float = array('f')
     # Calculate vars values and return them
     # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     # Send ping requests to a server separated by approximately one second
-    lst = []
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
+        delay_float.append(delay)
         print(delay)
         # list.append(round(delay[0]*1000,2))
         time.sleep(1)  # one second
-        i +=1
     stdev = 0
-    packet_min = min(list)
-    packet_max = max(list)
-    packet_avg = sum(list)/len(list)
+    stdev_var = stdev(delay_float)
+    packet_min = min(delay_float)
+    packet_max = max(delay_float)
+    packet_avg = sum((delay_float)/len(delay_float))
 
-    for i in lst:
-        stdev += (i-packet_avg)**2
+    #for i in lst:
+      #  stdev += (i-packet_avg)**2
         # print (stdev)
     # stdev_var = math.sqrt((stdev / len(list)))
-    stdev_var = list(map(int, list))
+    # stdev_var = list(map(int, list))
     vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     return vars
 
