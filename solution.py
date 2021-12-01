@@ -124,7 +124,8 @@ def ping(host, timeout=1):
     print("Pinging " + dest + " using Python:")
     print("")
     # Calculate vars values and return them
-    vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str((round(stdev_var), 2))]
+    # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str((round(stdev_var), 2))]
+    vars = [float(round(packet_min,2)), float(round(packet_avg,2)), float(round(packet_max,2)), float(round(stdev_var,2))]
     # Send ping requests to a server separated by approximately one second
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
