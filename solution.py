@@ -9,6 +9,13 @@ import binascii
 from types import CodeType
 from typing import Sequence
 # Should use stdev
+packet_min = 0
+packet_avg = 0
+packet_max = 0
+stdev_var = 0
+timeRTT = []
+packageRev = 0
+packageSent = 0
 
 ICMP_ECHO_REQUEST = 8
 
@@ -51,13 +58,14 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         recPacket, addr = mySocket.recvfrom(1024)
 
         # Fill in start
-        icmpHeader = recPacket[20:28]
-        icmpType, CodeType, checksum, id, Sequence = struct.unpack("bbHHh", icmpHeader)
+        ICMP_HEADER = recPacket[20:28]
+        ICMP_Type, ICMP_CodeType, ICMP_Checksum, ICMP_ID, ICMP_Sequence = struct.unpack("bbHHh", ICMP_HEADER)
         
-        if id == ID:
-            bytesInDouble = struct.calcsize("d")
-            timeSent = struct.unpack("d",recPacket[28:28 + bytesInDouble])[0]
-            return timeReceived - timeSent
+        if ICMP_ID == ID:
+            ICMP_Bytes = struct.calcsize('d')
+            timeMark = struct.unpack('d',recPacket[28:28 + ICMP_Bytes])
+            ICMP_SentTime = timeMark[0]
+            return timeReceived - ICMP_SentTime
         # Fetch the ICMP header from the IP packet
 
         # Fill in end
@@ -84,8 +92,7 @@ def sendOnePing(mySocket, destAddr, ID):
         myChecksum = htons(myChecksum) & 0xffff
     else:
         myChecksum = htons(myChecksum)
-
-
+    
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, myChecksum, ID, 1)
     packet = header + data
 
@@ -114,28 +121,27 @@ def ping(host, timeout=1):
     dest = gethostbyname(host)
     print("Pinging " + dest + " using Python:")
     print("")
-    delay_list = array('f')
     # Calculate vars values and return them
-    # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
+    vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round((stdev_var), 2))]
     # Send ping requests to a server separated by approximately one second
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
-        list = []
-        delay_list.append(delay)
+        # list = []
+        # delay_list.append(delay)
         print(delay)
         # list.append(round(delay[0]*1000,2))
         time.sleep(1)  # one second
-    stdev = 0
-    packet_min = min(delay_list)
-    packet_max = max(delay_list)
-    packet_avg = (sum((delay_list)/(len(delay_list))))
-    stdev_var = stdev(delay_list)
+    # stdev = 0
+    # packet_min = min(delay_list)
+    # packet_max = max(delay_list)
+    # packet_avg = (sum((delay_list)/(len(delay_list))))
+    # stdev_var = stdev(delay_list)
     #for i in lst:
       #  stdev += (i-packet_avg)**2
         # print (stdev)
     # stdev_var = math.sqrt((stdev / len(list)))
     # stdev_var = list(map(int, list))
-    vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
+    # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     return vars
 
 if __name__ == '__main__':
