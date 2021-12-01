@@ -10,7 +10,7 @@ from types import CodeType
 from typing import Sequence
 import statistics
 # Should use stdev
-packet_min = 0
+packet_min = 999999999
 packet_avg = 0
 packet_max = 0
 stdev_var = 0
@@ -129,18 +129,20 @@ def ping(host, timeout=1):
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
         # list = []
-        #delay.append(delay)
+        #timeRTT.append(round(delay[0]*1000,2))
         print(delay)
-        # list.append(round(delay[0]*1000,2))
+        #list.append(round(delay[0]*1000,2))
         time.sleep(1)  # one second
     # stdev = 0
-    delay = [0]
-    packet_min = min(delay)
-    packet_max = max(delay)
-    packet_avg = ((sum(delay))/((len(delay))))
-    stdev_var = [1,2,3,4,5]
+    # delay = [0]
+    #packet_min = min(delay)
+    #packet_max = max(delay)
+    #packet_avg = ((sum(delay))/((len(delay))))
+    delay = list()
+    delay.append((delay))
+    #stdev_var = [0,1,2,3,4]
     #vars = [float(round(packet_min)), float(round(packet_avg)), float(round(packet_max)), float(round(stdev(stdev_var)))]
-    vars = [float(round(packet_min,2)), float(round(packet_avg,2)), float(round(packet_max,2)), float(round(statistics.stdev(stdev_var,2)))]
+    #vars = [float(round(packet_min,2)), float(round(packet_avg,2)), float(round(packet_max,2)), float(round(statistics.stdev(stdev_var,2)))]
     #for i in lst:
       #  stdev += (i-packet_avg)**2
         # print (stdev)
@@ -148,6 +150,7 @@ def ping(host, timeout=1):
     # stdev_var = list(map(int, list))
     # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),str(round(stdev(stdev_var), 2))]
     return vars
+    # print (vars)
 
 if __name__ == '__main__':
     ping("google.co.il")
